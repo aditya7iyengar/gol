@@ -3,10 +3,28 @@
 module Gol
   # Abstraction around the grid
   class Grid
+    RANGE = 100
+
     attr_accessor :cells
 
     def initialize(cells)
       @cells = cells
+    end
+
+    def self.super_new(cells)
+      (0..RANGE).each do |x|
+        (0..RANGE).each do |y|
+          unless has_cell(cells, x, y)
+            cells << Gol::Grid::Cell.new(false, x, y)
+          end
+        end
+      end
+
+      Gol::Grid.new(cells)
+    end
+
+    def self.has_cell(cells, x, y)
+      cells.any? { |cell| cell.x == x && cell.y == y }
     end
 
     def draw
